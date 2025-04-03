@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>DOM Example</title>
+
+
+</head>
+
+<body>
+    <h1 id="myHeading">Original Heading Text</h1>
+    <div id='parent' style=" display: flex; justify-content: center; align-items: center; flex-wrap: wrap;"></div>
+    <button id="btn_tap">Tap me to Display Data</button>
+
+    <script>
+        const home = document.getElementById('myHeading');
+        const btn_tap = document.getElementById('btn_tap');
+        const parent = document.getElementById('parent');
+
+
+
+        async function fetchData() {
+            const res = await fetch('https://jsonplaceholder.typicode.com/users');
+            const result = await res.json();
+            return result;
+        }
+
+        btn_tap.addEventListener('click', () => {
+
+
+            fetchData().then(data => data.map(item => {
+                console.log("Item is ", item)
+
+                const props = document.createElement('div');
+                const firstLastName = document.createElement('h2');
+                const email = document.createElement('h2');
+                const address = document.createElement('div');
+
+                address.style.display = 'flex';
+                address.style.justifyContent = 'center';
+                address.style.alignItems = 'center';
+
+
+                const zipCode = document.createElement('h2');
+                const StreetNumber = document.createElement('h2');
+                const city = document.createElement('h2');
+                const phoneNumber = document.createElement('h2');
+                const State = document.createElement('h2');
+
+                zipCode.innerText = "ZipCode" + " = " + item.address.zipcode
+                StreetNumber.innerText = "Street" + " = " + item.address.street
+                State.innerText = "suite" + " = " + item.address.suite
+                city.innerText = "City" + " = " + item.address.city
+
+                address.appendChild(zipCode)
+                address.appendChild(StreetNumber)
+                address.appendChild(State);
+                address.appendChild(city);
+
+                address.style.backgroundColor = 'aqua'
+                address.style.flexDirection = 'column'
+
+
+                firstLastName.innerText = item.name.split(' ').map(item => item[0].toUpperCase()).join(' ')
+                email.innerText = item.email
+
+                props.style.height = '30%';
+                props.style.width = '25%';
+                props.style.padding = '10px'
+                props.style.margin = '10px'
+                props.style.backgroundColor = 'pink'
+                props.innerText = item.name;
+                props.appendChild(firstLastName)
+                props.appendChild(email)
+                props.appendChild(address);
+                parent.appendChild(props);
+
+
+            }))
+        })
+
+    </script>
+</body>
+
+</html>
